@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script th:src="@{https://kit.fontawesome.com/a076d05399.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <script type="text/javascript" th:src="@{/js/main.js}"></script>
+</head>
+<body>
+<div class="container-fluid site-wrapper"> <!-- this is the Sheet -->
+    <div th:replace="Components/navigationBar.html"></div>
+
+    <div class="container-fluid content-wrapper" id="content"> <!-- this is the Content Wrapper -->
+        <div class="container">
+            <div class="row-fluid content-inner">
+                <div id="left" class="span9"> <!-- ADD "span12" if no sidebar, or "span9" with sidebar -->
+                    <div class="wrapper blog">
+                        <div class="heading">
+                            <h1 class="page-title">Overview - My Blog</h1>
+                            <hr>
+                        </div>
+
+                        <div class="content" th:each="blog : ${blogs}">
+                                <div class="section">
+                                    <div class="content">
+                                        <div class="item">
+                                            <div class="controls">
+                                                <span class="date-text" th:text="${blog.dateModify}"></span>
+                                            </div>
+                                            <div class="heading">
+                                                <h4><a rel="nofollow" th:href="@{/blog(id=${blog.id})}"
+                                                       th:text="${blog.title}">
+                                                </a></h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:replace="Components/rightBar.html"></div>
+
+            </div>
+        </div>
+    </div>  <!-- the controller has determined which view to be shown in the content -->
+
+    <div th:replace="Components/footer.html"></div>
+</body>
+</html>

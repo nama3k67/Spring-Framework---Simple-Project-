@@ -1,0 +1,65 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<header>
+    <div class="container-fluid header-wrapper " id="header"> <!-- this is the Header Wrapper -->
+        <div class="container">
+            <div class="title-wrapper">
+                <div class="title-wrapper-inner">
+
+                    <div class="title">
+                        <a rel="nofollow" th:href="@{/home}">
+                            Blogging About Programming
+                        </a>
+                    </div>
+                    <div class="subtitle">
+                        Welcome to my blog
+                    </div>
+                </div>
+            </div>  <!-- these are the titles -->
+            <div class="navbar navbar-compact">
+                <div class="navbar-inner">
+                    <div class="container">
+                        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+                        <a rel="nofollow" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"
+                           title="Toggle menu">
+                            <span class="menu-name">Menu</span>
+                            <span class="menu-bars">
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </span>
+                        </a>
+                        <!-- Everything you want hidden at 940px or less, place within here -->
+                        <div class="nav-collapse collapse">
+                            <ul class="nav" id="topMenu" data-submenu="horizontal">
+                                <li class=" active " style="">
+                                    <a rel="nofollow" th:href="@{/home}">My Blog</a>
+                                </li>
+                                <li class="  " style="">
+                                    <a rel="nofollow" th:href="@{/aboutme}">About Me</a>
+                                </li>
+                                <li>
+                                    <a rel="nofollow" th:href="@{/overview}">Overview</a>
+                                </li>
+                                <th:block th:if="${#request.userPrincipal != null}">
+                                    <li>
+                                        <a rel="nofollow" th:href="@{/createNewBlog}">Create New Blog</a>
+                                    </li>
+                                    <li>
+                                        <a rel="nofollow" th:href="@{#}" th:text="${#request.userPrincipal.name}"></a>
+                                    </li>
+                                    <li>
+                                        <a rel="nofollow" th:href="@{/logout}">logout</a>
+                                    </li>
+                                </th:block>
+                                <li th:if="${#request.userPrincipal == null}">
+                                    <a rel="nofollow" th:href="@{/login}">Login</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- this is the Menu content -->
+        </div>
+    </div>  <!-- this is the Header content -->
+</header>

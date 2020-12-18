@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Blog</title>
+    <script th:src="@{https://kit.fontawesome.com/a076d05399.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <script type="text/javascript" th:src="@{/js/main.js}"></script>
+</head>
+<body>
+<div class="container-fluid site-wrapper"> <!-- this is the Sheet -->
+    <div th:replace="Components/navigationBar.html"></div>
+
+    <div class="container-fluid content-wrapper" id="content"> <!-- this is the Content Wrapper -->
+        <div class="container">
+            <div class="row-fluid content-inner">
+                <div id="left" class="span9"> <!-- ADD "span12" if no sidebar, or "span9" with sidebar -->
+                    <div class="wrapper blog">
+                        <div class="content" th:each="blog : ${blogs}">
+                            <div class="section">
+                                <div class="content">
+                                    <div class="avatar">
+                                        <i class="icon-4x" title="${blog.title}">
+                                            <img src="https://www.iconfinder.com/data/icons/luchesa-part-3/128/Programming-512.png">
+                                        </i>
+                                    </div>
+                                    <div class="item">
+                                        <div class="controls">
+                                            <span class="date-text" th:text="${blog.dateModify}"></span>
+                                        </div>
+                                        <div class="heading">
+                                            <h4><b><a rel="nofollow" th:href="@{/blog(id=${blog.id})}"
+                                                      th:text="${blog.title}"
+                                                      style="text-decoration:none">
+                                            </a></b></h4>
+                                        </div>
+                                        <br>
+                                        <div class="content">
+                                            <div class="img-simple">
+                                                <div class="image">
+                                                    <a rel="nofollow" data-ss="imagemodal"
+                                                       th:data-href="@{${blog.picture}}"><img
+                                                            th:src="@{${blog.picture}}"
+                                                            th:alt="${blog.title}"
+                                                            data-target="#carouselExample"></a>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <p style="text-align:left;">
+                                                Type:<b> <a
+                                                    th:href="@{/displayByCategory(cateId=${blog.cateId})}"
+                                                    th:text="${blog.categoryByCateId.name}"
+                                                    style="text-decoration:none">
+                                            </a></b>
+                                                <span style="float:right;">
+                                                    <i class='far fa-eye' th:text="${blog.pageCount}"></i>
+                                                </span>
+                                            </p>
+                                            <br>
+                                            <p th:text="${blog.content}">
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div th:replace="Components/rightBar.html"></div>
+            </div>
+        </div>
+    </div>  <!-- the controller has determined which view to be shown in the content -->
+
+    <div th:replace="Components/footer.html"></div>
+    <!-- this is the Footer content -->
+</div>
+</body>
+</html>
