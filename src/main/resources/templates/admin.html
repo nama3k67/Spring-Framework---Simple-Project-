@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <script th:src="@{https://kit.fontawesome.com/a076d05399.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <script type="text/javascript" th:src="@{/js/main.js}"></script>
+    <style>
+        #myInput {
+            background-repeat: no-repeat;
+            font-size: 16px;
+            padding: 12px 20px 12px 40px;
+            border: 1px solid #ddd;
+        }
+
+        #myTable {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #dddddd;
+            font-size: 18px;
+        }
+
+        #myTable th, #myTable td {
+            text-align: left;
+            padding: 12px;
+        }
+
+        #myTable tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        #myTable tr.header, #myTable tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid site-wrapper"> <!-- this is the Sheet -->
+    <div th:replace="Components/navigationBar.html"></div>
+
+    <div class="container-fluid content-wrapper" id="content"> <!-- this is the Content Wrapper -->
+        <div class="container">
+            <div class="row-fluid content-inner">
+                <div id="left" class="span9"> <!-- ADD "span12" if no sidebar, or "span9" with sidebar -->
+                    <div class="wrapper blog">
+
+                        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."
+                               title="Type in a name">
+
+                        <table id="myTable">
+                            <tr class="header">
+                                <th style="width:40%;">Name</th>
+                                <th style="width:20%;">Role</th>
+                                <th style="width:25%;">Password</th>
+                                <th style="width:15%;"></th>
+                            </tr>
+                            <tr th:each="user : ${users}">
+                                <td th:text="${user.name}"></td>
+                                <td th:text="${user.role.name}"></td>
+                                <td th:text="${user.password}"></td>
+                                <td th:if="${user.role.name}=='USER'">
+                                    <a th:href="@{'/deleteUser/' + ${user.id}}" th:text="Delete" style="color: red;text-decoration: none"></a>
+                                </td>
+                            </tr>
+
+                        </table>
+
+                        <script>
+                            function myFunction() {
+                                var input, filter, table, tr, td, i, txtValue;
+                                input = document.getElementById("myInput");
+                                filter = input.value.toUpperCase();
+                                table = document.getElementById("myTable");
+                                tr = table.getElementsByTagName("tr");
+                                for (i = 0; i < tr.length; i++) {
+                                    td = tr[i].getElementsByTagName("td")[0];
+                                    if (td) {
+                                        txtValue = td.textContent || td.innerText;
+                                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                                            tr[i].style.display = "";
+                                        } else {
+                                            tr[i].style.display = "none";
+                                        }
+                                    }
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
+                <div th:replace="Components/rightBar.html"></div>
+            </div>
+        </div>
+    </div>  <!-- the controller has determined which view to be shown in the content -->
+
+    <div th:replace="Components/footer.html"></div>
+    <!-- this is the Footer content -->
+</div>
+</body>
+</html>

@@ -51,6 +51,6 @@ public class Users {
         return role;
     }
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     public Set<Blogs> getBlogs(){return blogs;}
 }
