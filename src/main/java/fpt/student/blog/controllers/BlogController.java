@@ -133,12 +133,12 @@ public class BlogController {
         blog.setCategoryByCateId(category);
         bLogService.save(blog);
 
-        return "redirect:profile";
+        return "redirect:/profile";
     }
 
     @GetMapping("delete/{id}")
     public String deleteBlog(@PathVariable("id") int id){
         bLogService.deleteById(id);
-        return "redirect:profile";
+        return "redirect:/profile";
     }
 }

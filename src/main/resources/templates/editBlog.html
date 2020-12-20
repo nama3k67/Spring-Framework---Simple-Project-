@@ -11,7 +11,7 @@
 <div class="container-fluid site-wrapper"> <!-- this is the Sheet -->
     <div th:replace="Components/navigationBar.html"></div>
     <div class="wrap-contact100">
-        <form class="contact100-form" th:action="@{/edit/${id}}" th:object="${blogDTO}" method="post">
+        <form class="contact100-form" th:action="@{'/edit/' + ${id}}" th:object="${blogDTO}" method="post">
                     <span class="contact100-form-title">
                         New Blog
                     </span>
@@ -38,8 +38,8 @@
                 <div class="form-group d-flex justify-content-center">
                     <div class="card" style="width: 18rem;">
                         <img alt="Blog Image" class="card-img-top"
-                             id="img-preview"
-                             th:src="https://s7d7.scene7.com/is/image/DeluxeForms/20986?wid=800"/>
+                             id="img-preview" th:src="*{picture}"
+                             />
                         <input alt="Product Image" class="form-control" id="image-url"
                                th:field="*{picture}" type="hidden"
                                value="https://s7d7.scene7.com/is/image/DeluxeForms/20986?wid=800"> <label
