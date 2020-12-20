@@ -1,6 +1,7 @@
 package fpt.student.blog.services.impl;
 
 import fpt.student.blog.entities.Blogs;
+import fpt.student.blog.entities.Users;
 import fpt.student.blog.repositories.BLogRepository;
 import fpt.student.blog.services.BLogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,11 @@ public class BlogServiceImpl implements BLogService {
     @Override
     public Page<Blogs> findAll(Pageable pageable) {
         return bLogRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Blogs> findByUsers(Users users) {
+        return bLogRepository.findByUsers(users);
     }
 
     @Override

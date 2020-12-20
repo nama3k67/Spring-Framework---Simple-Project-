@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Blog</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/utils.css}">
+</head>
+<body>
+<div class="container-fluid site-wrapper"> <!-- this is the Sheet -->
+    <div th:replace="Components/navigationBar.html"></div>
+    <div class="wrap-contact100">
+        <form class="contact100-form" th:action="@{/edit/${id}}" th:object="${blogDTO}" method="post">
+                    <span class="contact100-form-title">
+                        New Blog
+                    </span>
+
+            <div class="wrap-input100 rs1-wrap-input100">
+                <span class="label-input100">Title *</span>
+                <label>
+                    <input type="text" th:field="*{title}" class="input100" placeholder="Enter Title">
+                </label>
+                <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="errorMessage"></span>
+            </div>
+
+            <div class="wrap-input100 rs1-wrap-input100">
+                <span class="label-input100">Type *</span>
+                <br/>
+                <select th:field="*{cateId}" class="input100">
+                    <option class="input100" th:each="category : ${categories}" th:value="${category.id}"
+                            th:text="${category.name}"></option>
+                </select>
+            </div>
+
+            <div class="wrap-input100">
+                <span class="label-input100">Image :</span>
+                <div class="form-group d-flex justify-content-center">
+                    <div class="card" style="width: 18rem;">
+                        <img alt="Blog Image" class="card-img-top"
+                             id="img-preview"
+                             th:src="https://s7d7.scene7.com/is/image/DeluxeForms/20986?wid=800"/>
+                        <input alt="Product Image" class="form-control" id="image-url"
+                               th:field="*{picture}" type="hidden"
+                               value="https://s7d7.scene7.com/is/image/DeluxeForms/20986?wid=800"> <label
+                            class="card-body mx-auto" for="file-upload">
+                        <input
+                                id="file-upload" style="display: none;" type="file"><span
+                            class="btn btn-primary">Select an Image</span>
+                    </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="wrap-input100">
+                <span class="label-input100">Content *</span>
+                <textarea th:field="*{content}" class="input100" placeholder="Product's Content here..."></textarea>
+                <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="errorMessage"></span>
+            </div>
+
+            <div class="container-contact100-form-btn">
+                <div class="wrap-contact100-form-btn">
+                    <div class="contact100-form-bgbtn"></div>
+                    <button class="contact100-form-btn">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div th:replace="Components/footer.html"></div>
+</div>
+<script>
+    const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/khangvnfpt/upload";
+    const CLOUDINARY_UPLOAD_PRESET = "omu5ksxl";
+    var imgPreview = document.getElementById('img-preview');
+    var fileUpload = document.getElementById('file-upload');
+    var imgField = document.getElementById('image-url');
+    var indexField = document.getElementById('index');
+
+    fileUpload.addEventListener('change', function (event) {
+        var file = event.target.files[0];
+        var formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+        axios({
+            url: CLOUDINARY_URL,
+            method: 'POST',
+            headers: {
+                "Content-Type": 'application/x-www-form-urlencoded'
+            },
+            data: formData
+        }).then((res) => {
+            console.log(">" + imgField.value);
+            imgPreview.src = res.data.secure_url;
+            imgField.value = res.data.secure_url;
+            console.log(">>" + imgField.value);
+        }).catch((err) => {
+            console.log(err);
+        });
+    })
+</script>
+<script crossorigin="anonymous"
+        integrity="sha512-bYkaBWaFtfPIMYt9+CX/4DWgfrjcHinjerNYxQmQx1VM76eUsPPKZa5zWV8KksVkBF/DaHSADCwil2J5Uq2ctA=="
+        src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.js">
+</script>
+</body>
+</html>

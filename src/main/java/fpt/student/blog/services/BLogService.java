@@ -1,6 +1,7 @@
 package fpt.student.blog.services;
 
 import fpt.student.blog.entities.Blogs;
+import fpt.student.blog.entities.Users;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,8 @@ public interface BLogService {
     <S extends Blogs> List<S> findAll(Example<S> example, Sort sort);
 
     Page<Blogs> findAll(Pageable pageable);
+
+    List<Blogs> findByUsers(Users users);
 
     <S extends Blogs> S save(S s);
 

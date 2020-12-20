@@ -11,10 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -98,5 +95,50 @@ public class BlogController {
         bLogService.save(blog);
 
         return "redirect:home";
+    }
+
+    @GetMapping("edit/{id}")
+    public String editBLog(ModelMap model, @PathVariable("id") int id){
+        Blogs blog = bLogService.findById(id).get();
+        BlogDTO blogDTO = new BlogDTO();
+        blogDTO.setCateId(blog.getCateId());
+        blogDTO.setContent(blog.getContent());
+        blogDTO.setPicture(blog.getPicture());
+        blogDTO.setTitle(blog.getTitle());
+
+        model.addAttribute("blogDTO", blogDTO);
+        model.addAttribute("id", id);
+
+        List<Category> categories = (List<Category>) categoryService.findAll();
+        model.addAttribute("categories", categories);
+        return "editBlog";
+    }
+
+    @PostMapping("edit/{id}")
+    public String submitEdit(ModelMap model,@Validated @ModelAttribute(name = "blogDTO") BlogDTO blogDTO, BindingResult result, @PathVariable("id") int id){
+        if (result.hasErrors()){
+            List<Category> categories = (List<Category>) categoryService.findAll();
+            model.addAttribute("categories", categories);
+            return "editBlog";
+        }
+        Blogs blog = bLogService.findById(id).get();
+        blog.setPicture(blogDTO.getPicture());
+        blog.setCateId(blogDTO.getCateId());
+        blog.setContent(blogDTO.getContent());
+        blog.setTitle(blogDTO.getTitle());
+
+        Date date = new Date(new java.util.Date().getTime());
+        blog.setDateModify(date);
+        Category category = categoryService.findById(blogDTO.getCateId()).get();
+        blog.setCategoryByCateId(category);
+        bLogService.save(blog);
+
+        return "redirect:profile";
+    }
+
+    @GetMapping("delete/{id}")
+    public String deleteBlog(@PathVariable("id") int id){
+        bLogService.deleteById(id);
+        return "redirect:profile";
     }
 }
