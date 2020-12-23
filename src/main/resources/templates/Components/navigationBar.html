@@ -40,6 +40,9 @@
                                 <li>
                                     <a rel="nofollow" th:href="@{/overview}">Overview</a>
                                 </li>
+                                <li sec:authorize="hasAuthority('ADMIN')">
+                                    <a rel="nofollow" th:href="@{/admin}" th:text="Admin"></a>
+                                </li>
                                 <th:block th:if="${#request.userPrincipal != null}">
                                     <li>
                                         <a rel="nofollow" th:href="@{/createNewBlog}">Create New Blog</a>
@@ -51,11 +54,9 @@
                                         <a rel="nofollow" th:href="@{/logout}">logout</a>
                                     </li>
                                 </th:block>
-                                <li sec:authorize="hasAuthority('ADMIN')">
-                                    <a rel="nofollow" th:href="@{/admin}" th:text="Admin"></a>
-                                </li>
                                 <li th:if="${#request.userPrincipal == null}">
                                     <a rel="nofollow" th:href="@{/login}">Login</a>
+                                    <a rel="nofollow" th:href="@{/signup}">Signup</a>
                                 </li>
                             </ul>
                         </div>

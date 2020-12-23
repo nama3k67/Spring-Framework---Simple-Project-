@@ -11,6 +11,7 @@ import java.util.Set;
 public class Users {
     private int id;
     private String name;
+    private String email;
     private String password;
     private Role role;
     private Set<Blogs> blogs;
@@ -33,6 +34,11 @@ public class Users {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Column(name = "Email", length = 128, unique = true)
+    public String getEmail() {
+        return email;
     }
 
     @Basic

@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Service("userDetail")
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserService userService;
     private final RoleService roleService;

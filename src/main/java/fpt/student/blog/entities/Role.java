@@ -20,4 +20,9 @@ public class Role {
 
     @OneToMany(mappedBy = "role", targetEntity = Users.class)
     private Set<Users> users;
+
+    public Role(String name){
+        this.name =name;
+    }
+    public Role(){}
 }

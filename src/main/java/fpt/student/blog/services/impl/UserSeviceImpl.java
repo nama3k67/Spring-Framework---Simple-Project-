@@ -3,7 +3,6 @@ package fpt.student.blog.services.impl;
 import fpt.student.blog.entities.Users;
 import fpt.student.blog.repositories.UserRepository;
 import fpt.student.blog.services.UserService;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +11,12 @@ import java.util.Optional;
 public class UserSeviceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
+
+
+    @Override
+    public Users findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 
     public Users findByName(String name) {
         return userRepository.findByName(name);

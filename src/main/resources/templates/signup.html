@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Signup</title>
     <style>
         body {
             margin: 25px;
@@ -199,39 +199,7 @@
             width: 400px;
             margin-bottom: 8px;
         }
-
-        .btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 4px;
-            margin: 5px 0;
-            opacity: 0.85;
-            display: inline-block;
-            font-size: 17px;
-            line-height: 20px;
-            text-decoration: none; /* remove underline from anchors */
-        }
-        .fb {
-            background-color: #3B5998;
-            color: white;
-        }
-
-        .google {
-            background-color: #dd4b39;
-            color: white;
-        }
-
-        .google {
-            background-color: #dd4b39;
-            color: white;
-        }
-
-        .btn:hover {
-            opacity: 1;
-        }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <div class="login-wrap">
@@ -240,17 +208,32 @@
         <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"></label>
         <div class="login-form">
             <div class="sign-in-htm">
-                <form th:action="@{/j_spring_security_check}" method="post">
+                <h2 th:if="${userDTO.signInProvider!=null}">
+                    Signup with <span th:utext="${userDTO.signInProvider}"></span>
+                </h2>
+
+                <form th:action="@{/j_spring_security_check}" th:object="${userDTO}" method="post">
+                    <input type="hidden" th:field="*{signInProvider}">
                     <div class="group">
                         <label for="user" class="label">Username</label>
                         <label>
-                            <input type="text" class="input" name="username">
+                            <input type="text" class="input" th:field="*{name}">
+                            <span class="errorMessage" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+                        </label>
+                    </div>
+                    <div class="group">
+                        <label class="label">Email</label>
+                        <label>
+                            <input type="text" class="input" th:field="*{email}">
+                            <span class="errorMessage" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
                         </label>
                     </div>
                     <div class="group">
                         <label for="pass" class="label">Password</label>
                         <label>
-                            <input type="password" class="input" data-type="password" name="password">
+                            <input type="password" class="input" data-type="password" th:field="*{password}">
+                            <span class="errorMessage" th:if="${#fields.hasErrors('password')}"
+                                  th:errors="*{password}"></span>
                         </label>
                     </div>
                     <div>
@@ -270,24 +253,9 @@
                         <button class="button">Home</button>
                     </a>
                 </div>
-                <hr>
-                <a href="https://www.facebook.com/dialog/oauth?client_id=383910079505656&redirect_uri=http://localhost:8080/BlogIT/auth/facebook" class="fb btn">
-                    <i class="fa fa-facebook fa-fw"></i> Login with Facebook</a>
-                <br/>
-
-                <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/BlogIT/auth/google&response_type=code
-    &client_id=429606367649-fakrssn80s85dqp2j1o6o439dsifrolt.apps.googleusercontent.com&approval_prompt=force" class="google btn">
-                    <i class="fa fa-google fa-fw"></i> Login with Google+</a>
-                <br/>
+                <div class="hr"></div>
                 <!--login error -->
-                <div th:if="${#request.getParameter('error')=='true'}" style="color: red; margin: 10px 0px;">
-                    Login Failed!!<br>
-                    Reason:
-                    <span th:if="${#session!=null and #session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION')!=null}"
-                          th:utext="${#session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION').message}">
-                        Static summary
-                    </span>
-                </div>
+                <div class="errorMessage" th:utext="${message}"></div>
             </div>
         </div>
     </div>

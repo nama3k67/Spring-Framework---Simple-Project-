@@ -5,6 +5,8 @@ import fpt.student.blog.entities.Role;
 import java.util.Optional;
 
 public interface RoleService {
+    Optional<Role> findByName(String name);
+
     <S extends Role> S save(S s);
 
     <S extends Role> Iterable<S> saveAll(Iterable<S> iterable);

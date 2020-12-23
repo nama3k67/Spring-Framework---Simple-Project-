@@ -6,6 +6,8 @@ import java.util.Optional;
 
 public interface UserService {
 
+    Users findByEmail(String email);
+
     Users findByName(String name);
 
     <S extends Users> S save(S s);
