@@ -8,7 +8,8 @@ import javax.validation.constraints.Size;
 
 @Data
 public class UserDTO {
-    @Email(message = "Email should be valid")
+    @NotBlank(message = "Email is required!")
+    @Email(message = "Email should be valid!")
     private String email;
 
     @NotBlank(message = "name is required!")
@@ -16,12 +17,5 @@ public class UserDTO {
 
     @Size(min = 6, max = 100, message = "Password must be between 6 and 100 characters!")
     private String password;
-
-    private Role role;
-
-    private String signInProvider;
-    private String providerUserId;
-
-    public UserDTO(){}
 
 }

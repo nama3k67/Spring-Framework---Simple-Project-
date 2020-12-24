@@ -204,16 +204,12 @@
 <body>
 <div class="login-wrap">
     <div class="login-html">
-        <input type="radio" name="tab" class="sign-in" style="" checked><label for="tab-1" class="tab">Sign In</label>
+        <input type="radio" name="tab" class="sign-in" style="" checked><label for="tab-1" class="tab">Sign Up</label>
         <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab"></label>
         <div class="login-form">
             <div class="sign-in-htm">
-                <h2 th:if="${userDTO.signInProvider!=null}">
-                    Signup with <span th:utext="${userDTO.signInProvider}"></span>
-                </h2>
 
-                <form th:action="@{/j_spring_security_check}" th:object="${userDTO}" method="post">
-                    <input type="hidden" th:field="*{signInProvider}">
+                <form th:action="@{/signup}" th:object="${userDTO}" method="post">
                     <div class="group">
                         <label for="user" class="label">Username</label>
                         <label>
@@ -244,7 +240,7 @@
                     </div>
                     <br/>
                     <div class="group">
-                        <input type="submit" class="button" value="Sign In">
+                        <input type="submit" class="button" value="Sign Up">
                         <br/>
                     </div>
                 </form>
