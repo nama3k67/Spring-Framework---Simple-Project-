@@ -14,10 +14,13 @@ public class Users {
     private String email;
     private String password;
     private Role role;
+    private boolean enabled = false;
     private Set<Blogs> blogs;
+    private VerificationToken token;
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -41,6 +44,7 @@ public class Users {
         return email;
     }
 
+
     @Basic
     @Column(name = "password")
     public String getPassword() {
@@ -51,6 +55,10 @@ public class Users {
         this.password = password;
     }
 
+    @Basic
+    @Column(name = "enabled")
+    public boolean isEnabled(){return enabled;}
+
     @ManyToOne(targetEntity = Role.class)
     @JoinColumn(name = "role_id")
     public Role getRole() {
@@ -59,4 +67,8 @@ public class Users {
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
     public Set<Blogs> getBlogs(){return blogs;}
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    public VerificationToken getToken(){return token;}
+
 }

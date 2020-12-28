@@ -33,6 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         Users user = userService.findByName(userName);
+
         if (user == null){
             throw new UsernameNotFoundException("User not found with username "+ userName);
         }
@@ -49,7 +50,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         GrantedAuthority authority = new SimpleGrantedAuthority(roleName);
         grantList.add(authority);
 
-        UserDetails userDetails = (UserDetails) new User(user.getName(), passwordEncoder.encode(user.getPassword()), grantList);
+        UserDetails userDetails = (UserDetails) new User(user.getName(),
+                                                        passwordEncoder.encode(user.getPassword()),
+                                                        user.isEnabled(),
+                                                        true,
+                                                        true,
+                                                        true,
+                                                        grantList);
 
         return userDetails;
     }

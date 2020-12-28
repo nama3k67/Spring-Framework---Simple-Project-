@@ -3,10 +3,13 @@ package fpt.student.blog.controllers;
 import com.restfb.types.User;
 import fpt.student.blog.entities.Role;
 import fpt.student.blog.entities.Users;
+import fpt.student.blog.entities.VerificationToken;
 import fpt.student.blog.models.GooglePojo;
 import fpt.student.blog.models.UserDTO;
 import fpt.student.blog.services.RoleService;
 import fpt.student.blog.services.UserService;
+import fpt.student.blog.services.VerificationTokenService;
+import fpt.student.blog.utils.AuthenticationUtil;
 import fpt.student.blog.utils.GoogleUtils;
 import fpt.student.blog.utils.RestFB;
 import org.apache.http.client.ClientProtocolException;
@@ -19,12 +22,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Optional;
 
 @Controller
 public class AuthController {
@@ -38,10 +41,14 @@ public class AuthController {
     private UserService userService;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private RoleService roleService;
 
     @Autowired
-    private RoleService roleService;
+    private VerificationTokenService verificationTokenService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @GetMapping("auth/google")
     public String loginGoogle(HttpServletRequest request, ModelMap model) throws ClientProtocolException, IOException{
         String code = request.getParameter("code");
@@ -62,10 +69,8 @@ public class AuthController {
             return "signup";
         }
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(users.getName(), users.getPassword())
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationUtil.Authenticate(users, authenticationManager);
+        
         return "redirect:/home";
     }
 
@@ -88,10 +93,7 @@ public class AuthController {
             return "signup";
         }
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(users.getName(), users.getPassword())
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationUtil.Authenticate(users, authenticationManager);
         return "redirect:/home";
     }
 
@@ -125,12 +127,48 @@ public class AuthController {
 
         Role role = roleService.findByName("USER").orElse(new Role("USER"));
         user.setRole(role);
-        userService.save(user);
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getName(), user.getPassword())
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        userService.save(user);
+        userService.confirmRegistration(user);
+        return "redirect:/home";
+    }
+
+    @GetMapping("registrationConfirm")
+    public String confirmation(@RequestParam("token") String token, ModelMap model){
+        Optional<VerificationToken> optional = verificationTokenService.findByToken(token);
+        if (optional.isEmpty()){
+            return "tokenError";
+        }
+        VerificationToken confirmToken = optional.get();
+        Calendar calendar = Calendar.getInstance();
+
+        if (confirmToken.getExpiryDate().getTime() - calendar.getTime().getTime()<0){
+            model.addAttribute("oldToken", token);
+            return "OverExpiredToken";
+        }
+
+        Users user = confirmToken.getUser();
+        user.setEnabled(true);
+        userService.save(user);
+        AuthenticationUtil.Authenticate(user, authenticationManager);
+        return "redirect:/home";
+    }
+
+    @GetMapping("resendToken")
+    public String resendNewToken(@RequestParam("oldToken") String oldToken){
+        VerificationToken token = verificationTokenService.findByToken(oldToken).get();
+        Users user = token.getUser();
+
+        userService.confirmRegistration(user);
+        user.setToken(null);
+        verificationTokenService.delete(token);
+        return "redirect:/home";
+    }
+
+    @GetMapping("deleteAccount")
+    public String deleteAccountByToken(@RequestParam("oldToken") String oldToken){
+        VerificationToken token = verificationTokenService.findByToken(oldToken).get();
+        userService.delete(token.getUser());
         return "redirect:/home";
     }
 }

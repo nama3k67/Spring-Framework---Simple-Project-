@@ -5,6 +5,9 @@ import fpt.student.blog.entities.Users;
 import java.util.Optional;
 
 public interface UserService {
+    String createNewToken(Users user);
+
+    void confirmRegistration(Users user);
 
     Users findByEmail(String email);
 

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reset New Token</title>
+    <script th:src="@{https://kit.fontawesome.com/a076d05399.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+    <script type="text/javascript" th:src="@{/js/main.js}"></script>
+</head>
+<body>
+<div class="container-fluid site-wrapper"> <!-- this is the Sheet -->
+    <div th:replace="Components/navigationBar.html"></div>
+
+    <div class="container-fluid content-wrapper" id="content"> <!-- this is the Content Wrapper -->
+        <div class="container">
+            <div class="row-fluid content-inner">
+                <div id="left" class="span9"> <!-- ADD "span12" if no sidebar, or "span9" with sidebar -->
+                    <div class="wrapper blog">
+                        <b>Out of date for your email confirmation, would you like to resend your confirmation email? </b>
+                        <a th:href="@{/resendToken(oldToken=${oldToken})}" style="text-decoration: none;color: #1161ee"> <b>Yes</b>, I want.</a>
+                        <br>
+                        <a th:href="@{/deleteAccount(oldToken=${oldToken})}" style="text-decoration: none;color: #1161ee"><b>No</b>, I will abandon the current account.</a>
+                    </div>
+                </div>
+                <div th:replace="Components/rightBar.html"></div>
+            </div>
+        </div>
+    </div>  <!-- the controller has determined which view to be shown in the content -->
+
+    <div th:replace="Components/footer.html"></div>
+    <!-- this is the Footer content -->
+</div>
+</body>
+</html>
