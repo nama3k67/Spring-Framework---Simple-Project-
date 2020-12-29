@@ -63,7 +63,8 @@ public class UserServiceImpl implements UserService {
 
         javaMailSender.send(msg);
     }
-    @Scheduled(initialDelay = 10 * 1000, fixedDelay = 10*1000*60)
+
+    @Scheduled(initialDelay = 100 * 1000, fixedDelay = 10*1000*60)
     public void checkUserExpired(){
         System.out.println("Check expired days of account(10 days after expired day of token):");
         List<Users> users = ((List<Users>)findAll());
@@ -75,7 +76,7 @@ public class UserServiceImpl implements UserService {
         users = users.stream()
                 .filter(user -> calendar.getTime().getTime() - user.getToken().getExpiryDate().getTime() > TimeUnit.DAYS.toMillis(10))
                 .collect(Collectors.toList());
-
+        System.out.println("Delete "+ users.size()+ " users.");
         users.forEach(user -> {
             System.out.println("Delete User : " + user.getName());
             delete(user);
