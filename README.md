@@ -7,6 +7,8 @@ Apply my knowledge of Spring Framework to create a project that is simple but ha
 - Create, edit, delete blogs for user.
 - View, delete Users by Admin.
 - Login by input or google, facebook.
+- Confirm to email when signup.
+
 2. Applying from Spring Framework. 
 - Spring boot, spring mvc, sping security, spring jpa.
 - Thymeleaf and validation (for input), security. 
